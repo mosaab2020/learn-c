@@ -10,7 +10,7 @@
  *
  * visa:
  * 13 or 16 digits, starts with 4
-*/
+ */
 
 bool checkSum(long num);
 string checkType(long num);
@@ -64,34 +64,32 @@ string checkType(long num) {
    * */
   long firstDigits = num;
   string cardType = "INVAILD";
-  int length  = 0;
+  int length = 0;
 
   if (checkSum(num)) {
 
-  // Remove last digit from number
-  // till only two digits are left
-  while (firstDigits >= 100) {
-    firstDigits /= 10;
-    length++;
-  }
+    // Remove last digit from number
+    // till only two digits are left
+    while (firstDigits >= 100) {
+      firstDigits /= 10;
+      length++;
+    }
 
-  // increase counter by two because the while loop loop til there are 2 digits
-  length += 2;
+    // increase counter by two because the while loop loop til there are 2
+    // digits
+    length += 2;
 
-
-  // check card type and change the cardType value
-  if ((length == 15) && (firstDigits == 34 || firstDigits == 37)) {
-	cardType = "AMEX";
-  } else if ((length == 16 || length == 13) && (firstDigits / 10 == 4)) {
-	cardType = "VISA";
-  } else if ((length == 16) && (firstDigits >= 51 && firstDigits <= 55)) {
-	cardType = "MASTERCARD";
-  }
-
+    // check card type and change the cardType value
+    if ((length == 15) && (firstDigits == 34 || firstDigits == 37)) {
+      cardType = "AMEX";
+    } else if ((length == 16 || length == 13) && (firstDigits / 10 == 4)) {
+      cardType = "VISA";
+    } else if ((length == 16) && (firstDigits >= 51 && firstDigits <= 55)) {
+      cardType = "MASTERCARD";
+    }
   }
   return cardType;
 }
-
 
 // some testing comments
 
