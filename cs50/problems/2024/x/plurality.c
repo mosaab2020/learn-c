@@ -59,6 +59,8 @@ int main(int argc, string argv[]) {
 bool vote(string name) {
   // TODO
   for (int i = 0; i < candidate_count; i++) {
+    /* loop over the candidates and check if the name is the same as the name
+     * given to the function */
     if (strcmp(candidates[i].name, name) == 0) {
       candidates[i].votes++;
       return true;
@@ -70,5 +72,14 @@ bool vote(string name) {
 // Print the winner (or winners) of the election
 void print_winner(void) {
   // TODO
+  // loop over the candidates
+  int winner_votes;
+  for (int i = 0; i < candidate_count; i++) {
+    if (candidates[i].votes >= winner_votes) {
+      printf("Winner: %s\n", candidates[i].name);
+    } else {
+      winner_votes = candidates[i].votes;
+    }
+  }
   return;
 }
