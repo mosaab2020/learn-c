@@ -43,12 +43,14 @@ int main(int argc, string argv[]) {
 
   // Loop over all voters
   for (int i = 0; i < voter_count; i++) {
-    string name = get_string("Vote: ");
-
-    // Check for invalid vote
-    if (!vote(name)) {
-      printf("Invalid vote.\n");
-    }
+    string name;
+    do {
+      name = get_string("Vote: ");
+      // Check for invalid vote
+      if (!vote(name)) {
+        printf("Invalid vote.\n");
+      }
+    } while (!vote(name));
   }
 
   // Display winner of election
@@ -72,12 +74,10 @@ bool vote(string name) {
 // Print the winner (or winners) of the election
 void print_winner(void) {
   // TODO
-  // loop over the candidates
-  int winner_votes;
+  int winner_votes = 0;
   for (int i = 0; i < candidate_count; i++) {
     if (candidates[i].votes >= winner_votes) {
       printf("Winner: %s\n", candidates[i].name);
-    } else {
       winner_votes = candidates[i].votes;
     }
   }
