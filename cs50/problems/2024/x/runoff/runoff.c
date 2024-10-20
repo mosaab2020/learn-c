@@ -1,5 +1,6 @@
 #include <cs50.h>
 #include <stdio.h>
+#include <string.h>
 
 // Max voters and candidates
 #define MAX_VOTERS 100
@@ -49,6 +50,7 @@ int main(int argc, string argv[]) {
     candidates[i].eliminated = false;
   }
 
+  // Get the number of voters
   voter_count = get_int("Number of voters: ");
   if (voter_count > MAX_VOTERS) {
     printf("Maximum number of voters is %i\n", MAX_VOTERS);
@@ -110,13 +112,46 @@ int main(int argc, string argv[]) {
 
 // Record preference if vote is valid
 bool vote(int voter, int rank, string name) {
-  // TODO
+  /*
+   * ERR: there is a bug in this function!
+   * TODO:
+   * Look for the candidate called name -- done
+   * If the candidate found: -- done
+   *    update preferences so that they are the voter's
+   *    rank preference, and return true
+   *
+   * If no candidates found, return false -- done
+   */
+  for (int i = 0; i < candidate_count; i++) {
+    if (strcmp(candidates[i].name, name) == 0) {
+      preferences[voter][i] = i;
+      return true;
+    }
+  }
   return false;
 }
 
 // Tabulate votes for non-eliminated candidates
 void tabulate(void) {
-  // TODO
+  /*
+   * TODO:
+   * Loop over the preferences
+   * If the candidate is the top vote and the candidate if not eliminated:
+   *    increase the vote count for the candidate
+   *
+   */
+  int candidate_number;
+  for (int i = 0; i < voter_count; i++) {
+    candidate_number = preferences[i][0];
+    if (candidates[candidate_number].eliminated == false) {
+      candidates[candidate_number].votes++;
+      printf("Name: %s\n", candidates[candidate_number].name);
+      printf("Votes: %i\n", candidates[candidate_number].votes);
+    }
+    /*for (int j = 0; j < candidate_count; j++) {*/
+    /*}*/
+  }
+
   return;
 }
 
