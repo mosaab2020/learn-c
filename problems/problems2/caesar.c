@@ -24,6 +24,7 @@ int main(int argc, string argv[]) {
    * which is ./caesar and the key (number)
    * and only_digits function is true
    */
+
   // make the key int
   int key = atoi(argv[1]);
 
