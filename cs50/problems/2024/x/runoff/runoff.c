@@ -27,17 +27,19 @@ int candidate_count;
 bool vote(int voter, int rank, string name); // done
 void tabulate(void);                         // done
 bool print_winner(void);                     // done
-int find_min(void);
-bool is_tie(int min);
-void eliminate(int min);
+int find_min(void);                          // done
+bool is_tie(int min);                        // done
+void eliminate(int min);                     // not done
+int first_candidate(void);                   // done
 
 int main(int argc, string argv[]) {
   // just for testing
   candidates[0].name = "bob";
-  candidates[0].votes = 1;
+  candidates[0].votes = 0;
 
   candidates[1].name = "mark";
-  candidates[1].votes = 2;
+  candidates[1].votes = 3;
+  candidates[1].eliminated = true;
 
   candidates[2].name = "joe";
   candidates[2].votes = 3;
@@ -45,7 +47,7 @@ int main(int argc, string argv[]) {
   candidate_count = 3;
   voter_count = 6;
   int min = find_min();
-  printf("Min: %i\n", min);
+  printf("is_tie: %i\n", is_tie(min));
 
   // Check for invalid usage
   /*if (argc < 2) {*/
@@ -210,29 +212,51 @@ int find_min(void) {
    * if the candidate is not eliminated && have the least votes:
    *    return his number of votes
    */
-  int least_votes = 0;
+  // the minimum index
+  // find the first not eliminated candidate
+  int min_index = first_candidate();
 
   // loop over candidates
-  for (int i = 0, j = 0; i < candidate_count; i++) {
-    int min_index = j;
-    // if the candidate is not eliminated
+  for (int i = 0; i < candidate_count; i++) {
+    // if the candidate[i] is not eliminated && his votes are less than the
+    // candidate_index who have the least votes
     if (candidates[i].eliminated == false &&
-        candidates[i].votes <= candidates[j].votes) {
+        candidates[i].votes < candidates[min_index].votes) {
       min_index = i;
     }
-    least_votes = min_index;
   }
-  return least_votes;
+  return candidates[min_index].votes;
 }
 
 // Return true if the election is tied between all candidates, false otherwise
 bool is_tie(int min) {
-  // TODO
-  return false;
+  /* TODO:
+   * loop over candidates -- done
+   * if the candidate[first_voter].votes != candidates[i].votes:
+   */
+  int min_index = first_candidate();
+  // loop over candidates
+  for (int i = 0; i < candidate_count; i++) {
+    if (candidates[i].eliminated == false &&
+        candidates[min_index].votes != candidates[i].votes) {
+      return false;
+    }
+  }
+  return true;
 }
 
 // Eliminate the candidate (or candidates) in last place
 void eliminate(int min) {
   // TODO
   return;
+}
+
+int first_candidate(void) {
+  // find the first not eliminated candidate
+  for (int i = 0; i < candidate_count; i++) {
+    if (candidates[i].eliminated == false) {
+      return i;
+    }
+  }
+  return 0;
 }
