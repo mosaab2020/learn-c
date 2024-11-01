@@ -24,9 +24,14 @@ int main(int argc, string argv[]) {
    * which is ./caesar and the key (number)
    * and only_digits function is true
    */
-
+  int key;
   // make the key int
-  int key = atoi(argv[1]);
+  if (argc > 1) {
+    key = atoi(argv[1]);
+  } else {
+    printf("Usage: %s key\n", argv[0]);
+    return exit_status + 1;
+  }
 
   if (argc == 2 && only_digits(argv[1]) && key >= 0) {
     string plainText = get_string("plaintext: ");

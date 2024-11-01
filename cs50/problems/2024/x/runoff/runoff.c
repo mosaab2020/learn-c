@@ -15,7 +15,6 @@ typedef struct {
   int votes;
   bool eliminated;
 } candidate;
-
 // Array of candidates
 candidate candidates[MAX_CANDIDATES];
 
@@ -29,7 +28,7 @@ void tabulate(void);                         // done
 bool print_winner(void);                     // done
 int find_min(void);                          // done
 bool is_tie(int min);                        // done
-void eliminate(int min);                     // not done
+void eliminate(int min);                     // done
 int first_candidate(void);                   // done
 
 int main(int argc, string argv[]) {

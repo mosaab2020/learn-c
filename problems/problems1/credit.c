@@ -17,7 +17,10 @@ string checkType(long num);
 
 int main(void) {
   /*long creditNum = 4003600000000014;*/
-  long creditNum = 1234567891234567;
+  long creditNum;
+  do {
+    creditNum = get_long("Number: ");
+  } while (creditNum < 0);
   /*long creditNum = 5103600000000016;*/
 
   printf("%s\n", checkType(creditNum));
@@ -63,7 +66,7 @@ string checkType(long num) {
    *  review the code and check for improvements
    * */
   long firstDigits = num;
-  string cardType = "INVAILD";
+  string cardType = "INVALID";
   int length = 0;
 
   if (checkSum(num)) {
