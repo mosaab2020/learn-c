@@ -85,70 +85,134 @@ void reflect(int height, int width, RGBTRIPLE image[height][width]) {
   return;
 }
 
-/*bool check_bound(int height, int width, int i, int j) {*/
-/*  if (j - 1 >= 0 && j + 1 < width && i - 1 >= 0 && i + 1 < height) {*/
-/*    return true;*/
-/*  }*/
-/*  return false;*/
-/*}*/
+int check_bounds(int height, int width, int i, int j) {
+  /* TODO:
+   * check if the pixel has neighbors on each side
+   * each neighbor has his own return number
+   */
+  /* If the pixel on the left has an address that is more than or equal to 0(the
+   start of the image);*/
+  if (j - 1 >= 0) {
+    return -1;
+  } else if (j + 1 < width) {
+    return 1;
+  }
+
+  if (i - 1 >= 0) {
+    return -2;
+  } else if (i + 1 < height) {
+    return 2;
+  }
+
+  if (i - 1 >= 0 && j - 1 >= 0) {
+    return -3;
+  } else if (i + 1 < height && j + 1 < width) {
+    return 3;
+  }
+
+  if (i + 1 < height && j - 1 >= 0) {
+    return -4;
+  } else if (i - 1 >= 0 && j + 1 < width) {
+    return 4;
+  }
+
+  return 0;
+}
 
 // Blur image
 void blur(int height, int width, RGBTRIPLE image[height][width]) {
-  /*TODO: function buggy:
+  /*TODO: function buggy: -- FIXED
    * the bug is that when the image is copied it has not fully copied, so the
    * pixels that are not copied show as zeros.
-   * NEED FIXED change all img2 to image[i][j]
+   * NEED FIXED: change all img2 to image[i][j] -- DONE
+   * function buggy:
+   * need to count the pixels that are between pixels
    */
 
-  RGBTRIPLE img2[3][3];
-  img2[0][0] = new_pixel(10, 20, 30);
-  img2[0][1] = new_pixel(40, 50, 60);
-  img2[0][2] = new_pixel(70, 80, 90);
-  img2[1][0] = new_pixel(110, 130, 140);
-  img2[1][1] = new_pixel(120, 140, 150);
-  img2[1][2] = new_pixel(130, 150, 160);
-  img2[2][0] = new_pixel(200, 210, 220);
-  img2[2][1] = new_pixel(220, 230, 240);
-  img2[2][2] = new_pixel(240, 250, 255);
-
   // Create a copy of image
-  RGBTRIPLE copy[3][3];
-  for (int i = 0; i < 3; i++) {
-    for (int j = 0; j < 3; j++) {
-      copy[i][j] = img2[i][j];
+  RGBTRIPLE copy[height][width];
+  for (int i = 0; i < height; i++) {
+    for (int j = 0; j < width; j++) {
+      copy[i][j] = image[i][j];
     }
   }
 
-  for (int i = 0; i < 3; i++) {
-    for (int j = 0; j < 3; j++) {
+  for (int i = 0; i < height; i++) {
+    for (int j = 0; j < width; j++) {
+      // Check if the pixel has neighbors on all sides
+      int average_red = 0;
+      int average_green = 0;
+      int average_blue = 0;
+      float counter = 1;
       if (j - 1 >= 0 && j + 1 < width && i - 1 >= 0 && i + 1 < height) {
-        int average_red = sepia_helper(
-            round((copy[i][j].rgbtRed + copy[i - 1][j].rgbtRed +
-                   copy[i + 1][j].rgbtRed + copy[i][j - 1].rgbtRed +
-                   copy[i][j + 1].rgbtRed + copy[i + 1][j + 1].rgbtRed +
-                   copy[i - 1][j - 1].rgbtRed + copy[i + 1][j - 1].rgbtRed +
-                   copy[i - 1][j + 1].rgbtRed) /
-                  9.00));
-        int average_green = sepia_helper(
-            round((copy[i][j].rgbtGreen + copy[i - 1][j].rgbtGreen +
-                   copy[i + 1][j].rgbtGreen + copy[i][j - 1].rgbtGreen +
-                   copy[i][j + 1].rgbtGreen + copy[i + 1][j + 1].rgbtGreen +
-                   copy[i - 1][j - 1].rgbtGreen + copy[i + 1][j - 1].rgbtGreen +
-                   copy[i - 1][j + 1].rgbtGreen) /
-                  9.00));
-        int average_blue = sepia_helper(
-            round((copy[i][j].rgbtBlue + copy[i - 1][j].rgbtBlue +
-                   copy[i + 1][j].rgbtBlue + copy[i][j - 1].rgbtBlue +
-                   copy[i][j + 1].rgbtBlue + copy[i + 1][j + 1].rgbtBlue +
-                   copy[i - 1][j - 1].rgbtBlue + copy[i + 1][j - 1].rgbtBlue +
-                   copy[i - 1][j + 1].rgbtBlue) /
-                  9.00));
-        img2[i][j].rgbtBlue = average_blue;
-        img2[i][j].rgbtGreen = average_green;
-        img2[i][j].rgbtRed = average_red;
-        /*printf("(%i, %i, %i)\n", img2[i][j].rgbtRed, img2[i][j].rgbtGreen,*/
-        /*       img2[i][j].rgbtBlue);*/
+        average_red = copy[i][j].rgbtRed + copy[i - 1][j].rgbtRed +
+                      copy[i + 1][j].rgbtRed + copy[i][j - 1].rgbtRed +
+                      copy[i][j + 1].rgbtRed + copy[i + 1][j + 1].rgbtRed +
+                      copy[i - 1][j - 1].rgbtRed + copy[i + 1][j - 1].rgbtRed +
+                      copy[i - 1][j + 1].rgbtRed;
+        average_green =
+            copy[i][j].rgbtGreen + copy[i - 1][j].rgbtGreen +
+            copy[i + 1][j].rgbtGreen + copy[i][j - 1].rgbtGreen +
+            copy[i][j + 1].rgbtGreen + copy[i + 1][j + 1].rgbtGreen +
+            copy[i - 1][j - 1].rgbtGreen + copy[i + 1][j - 1].rgbtGreen +
+            copy[i - 1][j + 1].rgbtGreen;
+        average_blue = copy[i][j].rgbtBlue + copy[i - 1][j].rgbtBlue +
+                       copy[i + 1][j].rgbtBlue + copy[i][j - 1].rgbtBlue +
+                       copy[i][j + 1].rgbtBlue + copy[i + 1][j + 1].rgbtBlue +
+                       copy[i - 1][j - 1].rgbtBlue +
+                       copy[i + 1][j - 1].rgbtBlue +
+                       copy[i - 1][j + 1].rgbtBlue;
+        counter = 9.0;
+      } else {
+        average_red += copy[i][j].rgbtRed;
+        average_green += copy[i][j].rgbtGreen;
+        average_blue += copy[i][j].rgbtBlue;
+        if (check_bounds(height, width, i, j) == -1) {
+          counter++;
+          average_red += copy[i][j - 1].rgbtRed;
+          average_green += copy[i][j - 1].rgbtGreen;
+          average_blue += copy[i][j - 1].rgbtBlue;
+        } else if (check_bounds(height, width, i, j) == 1) {
+          counter++;
+          average_red += copy[i][j + 1].rgbtRed;
+          average_green += copy[i][j + 1].rgbtGreen;
+          average_blue += copy[i][j + 1].rgbtBlue;
+        } else if (check_bounds(height, width, i, j) == -2) {
+          counter++;
+          average_red += copy[i - 1][j].rgbtRed;
+          average_green += copy[i - 1][j].rgbtGreen;
+          average_blue += copy[i - 1][j].rgbtBlue;
+        } else if (check_bounds(height, width, i, j) == 2) {
+          counter++;
+          average_red += copy[i + 1][j].rgbtRed;
+          average_green += copy[i + 1][j].rgbtGreen;
+          average_blue += copy[i + 1][j].rgbtBlue;
+        } else if (check_bounds(height, width, i, j) == -3) {
+          counter++;
+          average_red += copy[i - 1][j - 1].rgbtRed;
+          average_green += copy[i - 1][j - 1].rgbtGreen;
+          average_blue += copy[i - 1][j - 1].rgbtBlue;
+        } else if (check_bounds(height, width, i, j) == 3) {
+          counter++;
+          average_red += copy[i + 1][j + 1].rgbtRed;
+          average_green += copy[i + 1][j + 1].rgbtGreen;
+          average_blue += copy[i + 1][j + 1].rgbtBlue;
+        } else if (check_bounds(height, width, i, j) == -4) {
+          counter++;
+          average_red += copy[i + 1][j - 1].rgbtRed;
+          average_green += copy[i + 1][j - 1].rgbtGreen;
+          average_blue += copy[i + 1][j - 1].rgbtBlue;
+        } else if (check_bounds(height, width, i, j) == 4) {
+          counter++;
+          average_red += copy[i - 1][j + 1].rgbtRed;
+          average_green += copy[i - 1][j + 1].rgbtGreen;
+          average_blue += copy[i - 1][j + 1].rgbtBlue;
+        }
       }
+
+      image[i][j].rgbtBlue = round(average_blue / counter);
+      image[i][j].rgbtGreen = round(average_green / counter);
+      image[i][j].rgbtRed = round(average_red / counter);
     }
   }
   return;
