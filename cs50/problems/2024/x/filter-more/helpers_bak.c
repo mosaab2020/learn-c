@@ -177,112 +177,60 @@ void edges(int height, int width, RGBTRIPLE image[height][width]) {
       int Gy_red = 0;
       int Gy_green = 0;
       int Gy_blue = 0;
-      if (j - 1 >= 0 && j + 1 < width && i - 1 >= 0 && i + 1 < height) {
-        Gx_red = copy[i + 1][j - 1].rgbtRed * -1 + copy[i][j - 1].rgbtRed * -2 +
-                 copy[i - 1][j - 1].rgbtRed * -1 +
-                 copy[i + 1][j + 1].rgbtRed * 1 +
-                 copy[i - 1][j + 1].rgbtRed * 1 + copy[i][j + 1].rgbtRed * 2;
-        Gx_green =
-            copy[i + 1][j - 1].rgbtGreen * -1 + copy[i][j - 1].rgbtGreen * -2 +
-            copy[i - 1][j - 1].rgbtGreen * -1 +
-            copy[i + 1][j + 1].rgbtGreen * 1 +
-            copy[i - 1][j + 1].rgbtGreen * 1 + copy[i][j + 1].rgbtGreen * 2;
-        Gx_blue =
-            copy[i + 1][j - 1].rgbtBlue * -1 + copy[i][j - 1].rgbtBlue * -2 +
-            copy[i - 1][j - 1].rgbtBlue * -1 + copy[i + 1][j + 1].rgbtBlue * 1 +
-            copy[i - 1][j + 1].rgbtBlue * 1 + copy[i][j + 1].rgbtBlue * 2;
+      /*if (j - 1 >= 0 && j + 1 < width && i - 1 >= 0 && i + 1 < height) {*/
+      /*  Gx_red = copy[i + 1][j - 1].rgbtRed * -1 + copy[i][j - 1].rgbtRed * -2
+       * +*/
+      /*           copy[i - 1][j - 1].rgbtRed * -1 +*/
+      /*           copy[i + 1][j + 1].rgbtRed * 1 +*/
+      /*           copy[i - 1][j + 1].rgbtRed * 1 + copy[i][j + 1].rgbtRed *
+       * 2;*/
+      /*  Gx_green =*/
+      /*      copy[i + 1][j - 1].rgbtGreen * -1 + copy[i][j - 1].rgbtGreen * -2
+       * +*/
+      /*      copy[i - 1][j - 1].rgbtGreen * -1 +*/
+      /*      copy[i + 1][j + 1].rgbtGreen * 1 +*/
+      /*      copy[i - 1][j + 1].rgbtGreen * 1 + copy[i][j + 1].rgbtGreen * 2;*/
+      /*  Gx_blue =*/
+      /*      copy[i + 1][j - 1].rgbtBlue * -1 + copy[i][j - 1].rgbtBlue * -2
+       * +*/
+      /*      copy[i - 1][j - 1].rgbtBlue * -1 + copy[i + 1][j + 1].rgbtBlue * 1
+       * +*/
+      /*      copy[i - 1][j + 1].rgbtBlue * 1 + copy[i][j + 1].rgbtBlue * 2;*/
+      /**/
+      /*  Gy_red = copy[i - 1][j - 1].rgbtRed * -1 +*/
+      /*           copy[i + 1][j - 1].rgbtRed * 1 + copy[i - 1][j].rgbtRed * -2
+       * +*/
+      /*           copy[i + 1][j].rgbtRed * 2 + copy[i - 1][j + 1].rgbtRed * -1
+       * +*/
+      /*           copy[i + 1][j + 1].rgbtRed * 1;*/
+      /*  Gy_green =*/
+      /*      copy[i - 1][j - 1].rgbtGreen * -1 +*/
+      /*      copy[i + 1][j - 1].rgbtGreen * 1 + copy[i - 1][j].rgbtGreen * -2
+       * +*/
+      /*      copy[i + 1][j].rgbtGreen * 2 + copy[i - 1][j + 1].rgbtGreen * -1
+       * +*/
+      /*      copy[i + 1][j + 1].rgbtGreen * 1;*/
+      /*  Gy_blue =*/
+      /*      copy[i - 1][j - 1].rgbtBlue * -1 + copy[i + 1][j - 1].rgbtBlue * 1
+       * +*/
+      /*      copy[i - 1][j].rgbtBlue * -2 + copy[i + 1][j].rgbtBlue * 2 +*/
+      /*      copy[i - 1][j + 1].rgbtBlue * -1 + copy[i + 1][j + 1].rgbtBlue *
+       * 1;*/
+      /*} else {*/
+      for (int y = -1; y < 2; y++) {
+        for (int x = -1; x < 2; x++) {
+          if (check_pixel(height, width, i + y, j + x) == true) {
+            Gx_red += copy[i + y][j + x].rgbtRed * kernelGx[y + 1][x + 1];
+            Gy_red += copy[i + y][j + x].rgbtRed * kernelGy[y + 1][x + 1];
 
-        Gy_red = copy[i - 1][j - 1].rgbtRed * -1 +
-                 copy[i + 1][j - 1].rgbtRed * 1 + copy[i - 1][j].rgbtRed * -2 +
-                 copy[i + 1][j].rgbtRed * 2 + copy[i - 1][j + 1].rgbtRed * -1 +
-                 copy[i + 1][j + 1].rgbtRed * 1;
-        Gy_green =
-            copy[i - 1][j - 1].rgbtGreen * -1 +
-            copy[i + 1][j - 1].rgbtGreen * 1 + copy[i - 1][j].rgbtGreen * -2 +
-            copy[i + 1][j].rgbtGreen * 2 + copy[i - 1][j + 1].rgbtGreen * -1 +
-            copy[i + 1][j + 1].rgbtGreen * 1;
-        Gy_blue =
-            copy[i - 1][j - 1].rgbtBlue * -1 + copy[i + 1][j - 1].rgbtBlue * 1 +
-            copy[i - 1][j].rgbtBlue * -2 + copy[i + 1][j].rgbtBlue * 2 +
-            copy[i - 1][j + 1].rgbtBlue * -1 + copy[i + 1][j + 1].rgbtBlue * 1;
-      } else {
-        for (int y = -1; y < 2; y++) {
-          for (int x = -1; x < 2; x++) {
-            if (check_pixel(height, width, i + y, j + x) == true) {
-              Gx_red += copy[i + y][j + x].rgbtRed * kernelGx[y + 1][x + 1];
-              Gy_red += copy[i + y][j + x].rgbtRed * kernelGy[y + 1][x + 1];
+            Gx_green += copy[i + y][j + x].rgbtGreen * kernelGx[y + 1][x + 1];
+            Gy_green += copy[i + y][j + x].rgbtGreen * kernelGy[y + 1][x + 1];
 
-              Gx_green += copy[i + y][j + x].rgbtGreen * kernelGx[y + 1][x + 1];
-              Gy_green += copy[i + y][j + x].rgbtGreen * kernelGy[y + 1][x + 1];
-
-              Gx_blue += copy[i + y][j + x].rgbtBlue * kernelGx[y + 1][x + 1];
-              Gy_blue += copy[i + y][j + x].rgbtBlue * kernelGy[y + 1][x + 1];
-            }
+            Gx_blue += copy[i + y][j + x].rgbtBlue * kernelGx[y + 1][x + 1];
+            Gy_blue += copy[i + y][j + x].rgbtBlue * kernelGy[y + 1][x + 1];
           }
         }
       }
-      /*if (j - 1 >= 0) {*/
-      /*  Gx_red += copy[i][j - 1].rgbtRed * -2;*/
-      /*  Gx_green += copy[i][j - 1].rgbtGreen * -2;*/
-      /*  Gx_blue += copy[i][j - 1].rgbtBlue * -2;*/
-      /*}*/
-      /**/
-      /*if (j + 1 < width) {*/
-      /*  Gx_red += copy[i][j + 1].rgbtRed * 2;*/
-      /*  Gx_green += copy[i][j + 1].rgbtGreen * 2;*/
-      /*  Gx_blue += copy[i][j + 1].rgbtBlue * 2;*/
-      /*}*/
-      /**/
-      /*if (i - 1 >= 0) {*/
-      /*  Gy_red += copy[i - 1][j].rgbtRed * -2;*/
-      /*  Gy_green += copy[i - 1][j].rgbtGreen * -2;*/
-      /*  Gy_blue += copy[i - 1][j].rgbtBlue * -2;*/
-      /*}*/
-      /**/
-      /*if (i + 1 < height) {*/
-      /*  Gy_red += copy[i + 1][j].rgbtRed * 2;*/
-      /*  Gy_green += copy[i + 1][j].rgbtGreen * 2;*/
-      /*  Gy_blue += copy[i + 1][j].rgbtBlue * 2;*/
-      /*}*/
-      /**/
-      /*if (i - 1 >= 0 && j - 1 >= 0) {*/
-      /*  Gx_red += copy[i - 1][j - 1].rgbtRed * -1;*/
-      /*  Gx_green += copy[i - 1][j - 1].rgbtGreen * -1;*/
-      /*  Gx_blue += copy[i - 1][j - 1].rgbtBlue * -1;*/
-      /**/
-      /*  Gy_red += copy[i - 1][j - 1].rgbtRed * -1;*/
-      /*  Gy_green += copy[i - 1][j - 1].rgbtGreen * -1;*/
-      /*  Gy_blue += copy[i - 1][j - 1].rgbtBlue * -1;*/
-      /*}*/
-      /**/
-      /*if (i + 1 < height && j + 1 < width) {*/
-      /*  Gx_red += copy[i + 1][j + 1].rgbtRed * 1;*/
-      /*  Gx_green += copy[i + 1][j + 1].rgbtGreen * 1;*/
-      /*  Gx_blue += copy[i + 1][j + 1].rgbtBlue * 1;*/
-      /**/
-      /*  Gy_red += copy[i + 1][j + 1].rgbtRed * 1;*/
-      /*  Gy_green += copy[i + 1][j + 1].rgbtGreen * 1;*/
-      /*  Gy_blue += copy[i + 1][j + 1].rgbtBlue * 1;*/
-      /*}*/
-      /**/
-      /*if (i + 1 < height && j - 1 >= 0) {*/
-      /*  Gx_red += copy[i + 1][j - 1].rgbtRed * -1;*/
-      /*  Gx_green += copy[i + 1][j - 1].rgbtGreen * -1;*/
-      /*  Gx_blue += copy[i + 1][j - 1].rgbtBlue * -1;*/
-      /**/
-      /*  Gy_red += copy[i + 1][j - 1].rgbtRed * 1;*/
-      /*  Gy_green += copy[i + 1][j - 1].rgbtGreen * 1;*/
-      /*  Gy_blue += copy[i + 1][j - 1].rgbtBlue * 1;*/
-      /*}*/
-      /**/
-      /*if (i - 1 >= 0 && j + 1 < width) {*/
-      /*  Gx_red += copy[i - 1][j + 1].rgbtRed * 1;*/
-      /*  Gx_green += copy[i - 1][j + 1].rgbtGreen * 1;*/
-      /*  Gx_blue += copy[i - 1][j + 1].rgbtBlue * 1;*/
-      /**/
-      /*  Gy_red += copy[i - 1][j + 1].rgbtRed * -1;*/
-      /*  Gy_green += copy[i - 1][j + 1].rgbtGreen * -1;*/
-      /*  Gy_blue += copy[i - 1][j + 1].rgbtBlue * -1;*/
       /*}*/
       image[i][j].rgbtRed =
           check_overflow(round(sqrt(pow(Gx_red, 2) + pow(Gy_red, 2))));
