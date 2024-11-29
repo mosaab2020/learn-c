@@ -1,9 +1,7 @@
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-#define false 0
-#define true 1
 
 int main(int argc, char *argv[]) {
   /* TODO:
@@ -27,8 +25,8 @@ int main(int argc, char *argv[]) {
   // Count JPEGs
   int counter = 0;
 
-  int firstImage = false;
-  int imageOpened = false;
+  bool firstImage = false;
+  bool imageOpened = false;
   FILE *img;
   // While there's still data left to read from the memory card
   while (fread(buffer, 1, 512, card) == 512) {
@@ -37,7 +35,7 @@ int main(int argc, char *argv[]) {
         (buffer[3] & 0xf0) == 0xe0) {
       imageOpened = true;
       // Check if it is the first JPEG
-      if (firstImage == false) {
+      if (!firstImage) {
         firstImage = true;
         sprintf(filename, "%03i.jpg", counter);
         counter++;
@@ -62,7 +60,7 @@ int main(int argc, char *argv[]) {
         // write data to the image
         fwrite(buffer, 1, 512, img);
       }
-    } else if (imageOpened == true) {
+    } else if (imageOpened) {
       // write data to the image if there is a file opened
       fwrite(buffer, 1, 512, img);
     }
