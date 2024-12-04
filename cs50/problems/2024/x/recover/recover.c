@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef uint8_t BYTE;
+
 int main(int argc, char *argv[]) {
   /* TODO:
    * check the first 4 bytes in a buffer -- done
@@ -17,10 +19,10 @@ int main(int argc, char *argv[]) {
   FILE *card = fopen(argv[1], "r");
 
   // Create a buffer for a block of data
-  uint8_t buffer[512];
+  BYTE buffer[512];
 
   // Create a file name
-  char filename[300];
+  char *filename = malloc(sizeof(BYTE) * 8);
 
   // Count JPEGs
   int counter = 0;
@@ -65,6 +67,8 @@ int main(int argc, char *argv[]) {
       fwrite(buffer, 1, 512, img);
     }
   }
+
+  free(filename);
   if (img != NULL) {
     fclose(img);
   }
