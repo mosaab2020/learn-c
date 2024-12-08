@@ -15,6 +15,7 @@ typedef struct {
   int votes;
   bool eliminated;
 } candidate;
+
 // Array of candidates
 candidate candidates[MAX_CANDIDATES];
 
