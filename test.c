@@ -1,44 +1,63 @@
+#include <ctype.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-/*int lengthOfLastWord(char *s) {*/
-/*  int c = 0;*/
-/*  for (int i = strlen(s) - 1; i >= 0; i--) {*/
-/*    if (s[i] == ' ') {*/
-/*      if (c > 0) {*/
-/*        break;*/
-/*      }*/
-/*    } else {*/
-/*      c++;*/
-/*    }*/
-/*  }*/
-/**/
-/*  return c;*/
-/*}*/
+#define LENGTH 45
 
-int removeDuplicates(int *nums, int numsSize) {
-  /* TODO:
-   * have to pointers -- done
-   * loop over the array -- done
-   * if the first element in nums, is !equal to element in k:
-   *    nums[i-1] = nums[i];
-   *
-   */
-  int k = 0;
-  for (int i = 0; i < numsSize; i++) {
-    if (nums[k] != nums[i]) {
-      nums[k + 1] = nums[i];
-      k++;
+const int N = 26;
+
+typedef struct node {
+  char word[LENGTH + 1];
+  struct node *next;
+} node;
+
+// Hash table
+node *table[N];
+
+unsigned int hash(const char *word) {
+  // TODO: Improve this hash function
+  unsigned int hash = 0;
+  int counter = 0;
+  for (int i = 0; word[i] != '\0'; i++) {
+    if (isalpha(word[i])) {
+      hash += toupper(word[i]) - 'A';
+      counter++;
+    }
+
+    if (counter >= 3) {
+      break;
     }
   }
-  return k + 1;
+  return hash % N;
+}
+// Returns true if word is in dictionary, else false
+bool check(const char *word) {
+  /* TODO:
+   * hash word to get a hash value -- done
+   * Access linked list at that index in the hash table -- done
+   * traverse linked list, looking for the word (strcasecmp) -- done
+   */
+  int index = hash(word);
+
+  // cursor
+  node *cursor = table[index];
+  while (cursor != NULL) {
+    if (strcasecmp(word, cursor->word) == 0) {
+      return true;
+    }
+    cursor = cursor->next;
+  }
+  return false;
 }
 
 int main(void) {
   // program start:
-  /*printf("length: %i\n", lengthOfLastWord("hello world   ")); */
-  int array[] = {0, 0, 1, 1, 1, 2, 2, 3, 3, 4};
+  /*char str[LENGTH + 1];*/
+  char *str = "foo";
 
-  printf("k: %i\n", removeDuplicates(array, 10));
+  /*scanf("%s", str);*/
+
+  printf("%i\n", check(str));
 }
